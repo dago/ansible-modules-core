@@ -247,7 +247,7 @@ def main():
     # src is None only if this is called from template. The state may also be
     # 'link' or 'hard' which defaults to the previous state if not explicitly set
     # in the above code section.
-    elif state == 'file' or (src is None and state == prev_state):
+    elif state == 'file' or (src is None and prev_state in ['file','hard']):
 
         if state != prev_state:
             if follow and prev_state == 'link':
