@@ -206,7 +206,7 @@ def main():
             if follow and state == 'link':
                 # use the current target of the link as the source
                 src = os.path.realpath(path)
-            else:
+            elif state != prev_state:
                 module.fail_json(msg='src and dest are required for creating links')
 
     # original_basename is used by other modules that depend on file.
@@ -244,7 +244,10 @@ def main():
         else:
             module.exit_json(path=path, changed=False)
 
-    elif state == 'file':
+    # src is None only if this is called from template. The state may also be
+    # 'link' or 'hard' which defaults to the previous state if not explicitly set
+    # in the above code section.
+    elif state == 'file' or (src is None and state == prev_state):
 
         if state != prev_state:
             if follow and prev_state == 'link':
